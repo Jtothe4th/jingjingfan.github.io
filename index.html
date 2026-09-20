@@ -16,6 +16,7 @@
     --coral: #FF6B4A;
     --yellow: #FFC93C;
     --line: #E4E3DE;
+    --tint: #E9E7E0;
   }
 
   * { box-sizing: border-box; }
@@ -53,17 +54,35 @@
     align-items: center;
   }
 
-  /* --- Portrait + shape --- */
+  /* --- Portrait + frame --- */
   .portrait-box {
+    --offset: 14px;
+    --radius: 22px;
     position: relative;
     width: 240px;
     height: 240px;
   }
 
-  .blob {
+  /* Underlay: soft block peeking out bottom-right */
+  .portrait-box::before {
+    content: "";
     position: absolute;
-    inset: -26px;
+    inset: var(--offset) calc(var(--offset) * -1) calc(var(--offset) * -1) var(--offset);
+    border-radius: var(--radius);
+    background: var(--tint);
     z-index: 0;
+  }
+
+  /* Overlay: thin outline shifted top-left */
+  .portrait-box::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--offset) * -1) var(--offset) var(--offset) calc(var(--offset) * -1);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--indigo);
+    opacity: 0.5;
+    z-index: 2;
+    pointer-events: none;
   }
 
   .avatar {
@@ -71,16 +90,8 @@
     z-index: 1;
     width: 240px;
     height: 240px;
-    border-radius: 50%;
-    background: var(--indigo);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-    font-size: 76px;
-    letter-spacing: 0.02em;
+    border-radius: var(--radius);
+    background: var(--tint);
     overflow: hidden;
   }
 
@@ -92,13 +103,7 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .blob { animation: drift 900ms ease-out; }
-    .avatar { animation: rise 700ms ease-out; }
-  }
-
-  @keyframes drift {
-    from { opacity: 0; transform: scale(0.9) rotate(-6deg); }
-    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+    .portrait-box { animation: rise 700ms ease-out; }
   }
 
   @keyframes rise {
@@ -182,8 +187,7 @@
       text-align: left;
     }
     .portrait-box, .avatar { width: 176px; height: 176px; }
-    .avatar { font-size: 56px; }
-    .blob { inset: -18px; }
+    .portrait-box { --offset: 10px; --radius: 18px; }
   }
 </style>
 </head>
@@ -191,13 +195,8 @@
 
   <main class="wrap">
     <div class="portrait-box">
-      <svg class="blob" viewBox="0 0 292 292" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M146 8c46 0 84 14 108 46 22 30 30 70 18 108-12 39-44 66-84 80-42 15-92 12-122-18C36 194 18 152 20 108 22 62 58 34 96 18 112 11 129 8 146 8Z" fill="var(--yellow)" opacity="0.9"/>
-        <path d="M150 30c38 0 70 12 90 40 19 26 25 60 14 92-11 33-38 56-72 68-36 13-79 10-105-16-24-24-38-60-36-98 2-39 32-63 66-77 14-6 29-9 43-9Z" fill="var(--coral)" opacity="0.55"/>
-      </svg>
       <div class="avatar">
-        <!-- Swap this initials block for <img src="your-photo.jpg" alt="Jing Fan"> when you have a photo -->
-        JF
+        <img src="portrait.jpg" alt="Portrait of Jing Fan" width="512" height="512">
       </div>
     </div>
 

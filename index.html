@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jing Fan — Software Developer &amp; Consultant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --ink: #16171B;
+    --muted: #5A5D66;
+    --indigo: #3D52FF;
+    --coral: #FF6B4A;
+    --yellow: #FFC93C;
+    --line: #E4E3DE;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  a { color: inherit; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: 3px;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  /* --- Portrait + shape --- */
+  .portrait-box {
+    position: relative;
+    width: 240px;
+    height: 240px;
+  }
+
+  .blob {
+    position: absolute;
+    inset: -26px;
+    z-index: 0;
+  }
+
+  .avatar {
+    position: relative;
+    z-index: 1;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: var(--indigo);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 76px;
+    letter-spacing: 0.02em;
+    overflow: hidden;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .blob { animation: drift 900ms ease-out; }
+    .avatar { animation: rise 700ms ease-out; }
+  }
+
+  @keyframes drift {
+    from { opacity: 0; transform: scale(0.9) rotate(-6deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- Content --- */
+  .content { min-width: 0; }
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: clamp(36px, 5vw, 52px);
+    line-height: 1.05;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .role {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--indigo);
+    margin: 0 0 26px;
+  }
+
+  .bio {
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--ink);
+    max-width: 52ch;
+    margin: 0 0 34px;
+  }
+
+  .bio .edit-note {
+    display: block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+
+  .contact a {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 2px 0;
+    border-bottom: 1px solid transparent;
+    transition: border-color 150ms ease, color 150ms ease;
+  }
+
+  .contact a .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .contact a:nth-child(1) .dot { background: var(--indigo); }
+  .contact a:nth-child(2) .dot { background: var(--coral); }
+  .contact a:nth-child(3) .dot { background: var(--yellow); }
+
+  .contact a:hover,
+  .contact a:focus-visible {
+    border-bottom-color: currentColor;
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 680px) {
+    .wrap {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 56px 24px;
+      text-align: left;
+    }
+    .portrait-box, .avatar { width: 176px; height: 176px; }
+    .avatar { font-size: 56px; }
+    .blob { inset: -18px; }
+  }
+</style>
+</head>
+<body>
+
+  <main class="wrap">
+    <div class="portrait-box">
+      <svg class="blob" viewBox="0 0 292 292" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M146 8c46 0 84 14 108 46 22 30 30 70 18 108-12 39-44 66-84 80-42 15-92 12-122-18C36 194 18 152 20 108 22 62 58 34 96 18 112 11 129 8 146 8Z" fill="var(--yellow)" opacity="0.9"/>
+        <path d="M150 30c38 0 70 12 90 40 19 26 25 60 14 92-11 33-38 56-72 68-36 13-79 10-105-16-24-24-38-60-36-98 2-39 32-63 66-77 14-6 29-9 43-9Z" fill="var(--coral)" opacity="0.55"/>
+      </svg>
+      <div class="avatar">
+        <!-- Swap this initials block for <img src="your-photo.jpg" alt="Jing Fan"> when you have a photo -->
+        JF
+      </div>
+    </div>
+
+    <div class="content">
+      <h1>Jing Fan</h1>
+      <p class="role">Software developer &amp; consultant</p>
+
+      <p class="bio">
+        I'm a software developer and consultant working across the stack — from early product ideas
+        through to systems running in production. I like getting close to the code and close to the
+        people using it, and enjoy collaborating with teams to build things that hold up over time.
+        <span class="edit-note">— placeholder bio, edit this paragraph directly in index.html</span>
+      </p>
+
+      <div class="contact">
+        <a href="mailto:jing.jing.fan@gmail.com"><span class="dot"></span>jing.jing.fan@gmail.com</a>
+        <a href="https://github.com/jingjingfan" target="_blank" rel="noopener noreferrer"><span class="dot"></span>github.com/jingjingfan</a>
+        <a href="https://www.linkedin.com/in/jing-f-638057191/" target="_blank" rel="noopener noreferrer"><span class="dot"></span>linkedin.com/in/jing-f</a>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

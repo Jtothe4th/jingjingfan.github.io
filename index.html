@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jing Fan — Software Developer &amp; Consultant</title>
+<meta name="description" content="Jing Fan is a software developer and consultant in Ann Arbor, Michigan. This site is a floor plan, and you can rearrange the furniture.">
+<link rel="canonical" href="https://jingfan.dev/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#E6EBE7">
+
+<!-- Link previews in chat apps and social sites -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jingfan.dev/">
+<meta property="og:title" content="Jing Fan — Software Developer &amp; Consultant">
+<meta property="og:description" content="Software developer and consultant in Ann Arbor, Michigan. This site is a floor plan, and you can rearrange the furniture.">
+<meta property="og:image" content="https://jingfan.dev/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A floor plan drawing with Jing Fan's name and photo in the entry, a bio in the living room, and potted plants in the corners.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
@@ -194,12 +211,12 @@
   .piece.held { cursor: grabbing; }
   .piece:focus-visible { outline-offset: 6px; }
 
-  .sofa     { right: 130px; bottom: 15px; }
+  .sofa     { right: 130px; bottom: 16px; }
   .coffee   { right: 196px; bottom: 109px; }
   .armchair { right: 99px; bottom: 121px; }
-  .desk     { right: 30px; bottom: 24px; }
-  .table    { right: 132px; top: calc(50% - 50px); }
-  .herbs      { right: 22px; bottom: 20px; }
+  .desk     { right: 75px; bottom: 18px; }
+  .table    { right: 126px; top: calc(50% - 52px); }
+  .herbs      { right: -21px; top: 128px; }
   .p-entry    { right: 12px; top: 8px; }
   .p-monstera { right: -6px; bottom: -2px; }
   .p-calathea     { left: 2px; bottom: 1px; }
@@ -285,7 +302,8 @@
     .sofa { left: 20px; right: auto; bottom: 26px; }
     .coffee { left: 60px; right: auto; bottom: 108px; }
     .armchair { left: 144px; right: auto; bottom: 118px; }
-    .herbs { right: auto; left: 20px; bottom: 24px; }
+    .herbs { right: auto; left: 20px; top: auto; bottom: 24px; }
+    .desk { right: 30px; bottom: 24px; }
     .p-entry { right: 12px; top: 10px; }
     .p-entry svg { width: 50px; height: 50px; }
     .p-monstera { right: 6px; bottom: 14px; }
@@ -339,7 +357,7 @@
           Today, I’m a software developer and consultant at Atomic Object.
         </p>
 
-        <button class="piece sofa" type="button" aria-label="Sofa. Arrow keys move it, R turns it.">
+        <button class="piece sofa" type="button" data-r="180" aria-label="Sofa. Arrow keys move it, R turns it.">
           <svg width="168" height="70" viewBox="0 0 168 70"><rect x="1" y="1" width="166" height="68" rx="9"/><rect x="16" y="20" width="68" height="40" rx="5"/><rect x="84" y="20" width="68" height="40" rx="5"/><path class="line" d="M16 20h136"/></svg>
         </button>
         <button class="piece coffee" type="button" aria-label="Coffee table. Arrow keys move it, R turns it.">
@@ -383,7 +401,7 @@
         <button class="piece table" type="button" aria-label="Dining table. Arrow keys move it, R turns it.">
           <svg width="124" height="124" viewBox="0 0 124 124"><rect x="47" y="1" width="30" height="24" rx="6"/><rect x="47" y="99" width="30" height="24" rx="6"/><rect x="1" y="47" width="24" height="30" rx="6"/><rect x="99" y="47" width="24" height="30" rx="6"/><circle cx="62" cy="62" r="42"/></svg>
         </button>
-        <button class="piece plant herbs" type="button" aria-label="Herb planter. Arrow keys move it, R turns it.">
+        <button class="piece plant herbs" type="button" data-r="90" data-r-narrow="0" aria-label="Herb planter. Arrow keys move it, R turns it.">
           <svg width="98" height="32"><use href="#plant-herbs"/></svg>
         </button>
       </section>
@@ -418,6 +436,7 @@
   const reset = document.getElementById('reset');
   const pieces = [...document.querySelectorAll('.piece')];
   const steps = { ArrowLeft: [-12, 0], ArrowRight: [12, 0], ArrowUp: [0, -12], ArrowDown: [0, 12] };
+  const narrow = matchMedia('(max-width: 860px)').matches;
 
   const apply = (p) => {
     const s = p.state;
@@ -439,7 +458,8 @@
   };
 
   pieces.forEach((p) => {
-    const home = Number(p.dataset.r || 0);
+    // data-r is the starting turn; data-r-narrow overrides it on the phone layout
+    const home = Number((narrow && p.dataset.rNarrow) || p.dataset.r || 0);
     p.state = { x: 0, y: 0, r: home };
     apply(p);
     let grab = null;

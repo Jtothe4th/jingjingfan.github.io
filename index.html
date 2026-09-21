@@ -223,10 +223,56 @@
   .p-rubber   { left: 22px; bottom: 18px; }
   .p-door     { left: 12px; bottom: 4px; }
 
+  /* --- Backyard: the pond sits beside the title block --- */
+  .yard {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 28px 40px;
+    margin-top: 28px;
+  }
+
+  .pond-area { flex: 1 1 360px; max-width: 580px; }
+  .pond-head { display: flex; align-items: baseline; gap: 16px; margin: 0 0 6px 6px; }
+  .pond-head .room-name { margin: 0; }
+
+  .pond { display: block; width: 100%; height: auto; overflow: visible; cursor: pointer; touch-action: manipulation; }
+  .pond .bank { fill: #DDE2DB; stroke: var(--graphite); stroke-width: 1.5; }
+  .pond .water { fill: #CFE6E6; }
+  .pond .deep { fill: #BCDCDE; }
+  .pond .stone { fill: #E4E7E1; stroke: var(--graphite); stroke-width: 1.2; }
+  .pond .pellet { fill: #8A5A33; }
+  .pond .ripple {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ripple 900ms ease-out forwards;
+  }
+  .pond .pellet { transform-box: fill-box; transform-origin: center; animation: plop 220ms ease-out; }
+  .pond .pellet.stale { transition: opacity 1200ms ease; opacity: 0; }
+
+  @keyframes ripple {
+    from { transform: scale(0.15); opacity: 0.9; }
+    to   { transform: scale(1); opacity: 0; }
+  }
+  @keyframes plop {
+    from { transform: scale(2.2); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pond .ripple { display: none; }
+    .pond .pellet { animation: none; }
+  }
+
   /* --- Title block --- */
   .titleblock {
     width: min(100%, 430px);
-    margin: 28px 0 0 auto;
+    margin: 0 0 0 auto;
     border: 1.5px solid var(--graphite);
     background: var(--paper);
     font-size: 15px;
@@ -421,14 +467,55 @@
 
     </div>
 
-    <aside class="titleblock" aria-label="About this drawing">
-      <dl>
-        <div><dt>Drawing</dt><dd>Jing Fan, Software Consultant &amp; Developer</dd></div>
-        <div><dt>Location</dt><dd>Ann Arbor, Michigan</dd></div>
-        <div><dt>Scale</dt><dd>Not to scale</dd></div>
-        <div><dt>Note</dt><dd>The furniture moves. Drag a piece, or tab to one and use the arrow keys. Press R to turn it. <button class="reset" id="reset" type="button" hidden>Put everything back</button></dd></div>
-      </dl>
-    </aside>
+    <div class="yard">
+      <section class="pond-area" aria-labelledby="pond-h">
+        <div class="pond-head">
+          <h2 class="room-name" id="pond-h">Backyard pond</h2>
+          <button class="reset" id="feed" type="button">Feed my fish</button>
+        </div>
+        <svg class="pond" id="pond" viewBox="4 -2 532 288" role="img" aria-label="A small pond with three koi. Click the water to drop food.">
+          <defs>
+            <clipPath id="water-clip"><path d="M516 150C519 168 498 189 480 205C463 222 437 237 409 247C381 258 344 264 311 266C278 268 246 264 211 262C176 260 129 264 99 255C69 246 42 225 32 207C22 190 36 168 40 150C43 132 39 114 51 98C64 82 87 66 112 54C138 41 171 30 205 24C239 19 285 14 317 20C349 27 372 48 396 61C420 74 441 85 461 100C481 114 512 132 516 150Z"/></clipPath>
+          </defs>
+          <path class="bank" transform="translate(266 141) scale(1.04 1.07) translate(-266 -141)" d="M516 150C519 168 498 189 480 205C463 222 437 237 409 247C381 258 344 264 311 266C278 268 246 264 211 262C176 260 129 264 99 255C69 246 42 225 32 207C22 190 36 168 40 150C43 132 39 114 51 98C64 82 87 66 112 54C138 41 171 30 205 24C239 19 285 14 317 20C349 27 372 48 396 61C420 74 441 85 461 100C481 114 512 132 516 150Z"/>
+          <path class="water" id="water" d="M516 150C519 168 498 189 480 205C463 222 437 237 409 247C381 258 344 264 311 266C278 268 246 264 211 262C176 260 129 264 99 255C69 246 42 225 32 207C22 190 36 168 40 150C43 132 39 114 51 98C64 82 87 66 112 54C138 41 171 30 205 24C239 19 285 14 317 20C349 27 372 48 396 61C420 74 441 85 461 100C481 114 512 132 516 150Z"/>
+          <path class="deep" d="M456 156C458 168 447 184 431 193C415 202 382 204 361 211C340 217 327 227 305 231C282 236 253 240 228 238C204 236 177 229 157 221C137 214 115 203 108 192C101 181 113 167 116 156C118 145 119 135 124 123C130 112 132 94 149 86C166 78 203 76 229 75C255 75 280 79 304 82C327 85 351 89 369 96C388 103 400 113 415 123C429 133 453 144 456 156Z"/>
+          <g clip-path="url(#water-clip)">
+            <g id="pond-fish"></g>
+            <g id="pond-ripples"></g>
+            <g id="pond-food"></g>
+          </g>
+          <!-- lily pads float above the fish -->
+          <g pointer-events="none">
+            <path d="M0 0L19.3 -5.2A20 20 0 1 0 19.3 5.2Z" fill="#5CA851" transform="translate(112 96) rotate(40)"/>
+            <path d="M0 0L19.3 -5.2A20 20 0 1 0 19.3 5.2Z" fill="#3F8B3D" transform="translate(146 122) rotate(200) scale(.68)"/>
+            <path d="M0 0L19.3 -5.2A20 20 0 1 0 19.3 5.2Z" fill="#4E9B47" transform="translate(424 198) rotate(125) scale(.86)"/>
+            <g transform="translate(109 93)" fill="#E9A6B8">
+              <ellipse cy="-5" rx="2.7" ry="5.6"/><ellipse cy="-5" rx="2.7" ry="5.6" transform="rotate(60)"/><ellipse cy="-5" rx="2.7" ry="5.6" transform="rotate(120)"/>
+              <ellipse cy="-5" rx="2.7" ry="5.6" transform="rotate(180)"/><ellipse cy="-5" rx="2.7" ry="5.6" transform="rotate(240)"/><ellipse cy="-5" rx="2.7" ry="5.6" transform="rotate(300)"/>
+              <circle r="2.3" fill="#F4D58A"/>
+            </g>
+          </g>
+          <g pointer-events="none">
+            <ellipse class="stone" cx="57" cy="231" rx="16" ry="11" transform="rotate(-24 57 231)"/>
+            <ellipse class="stone" cx="87" cy="250" rx="11" ry="8" transform="rotate(-10 87 250)"/>
+            <ellipse class="stone" cx="487" cy="121" rx="15" ry="10" transform="rotate(42 487 121)"/>
+            <ellipse class="stone" cx="461" cy="97" rx="10" ry="7" transform="rotate(30 461 97)"/>
+            <ellipse class="stone" cx="320" cy="269" rx="13" ry="8"/>
+          </g>
+        </svg>
+        <p class="vh" id="pond-status" aria-live="polite"></p>
+      </section>
+
+      <aside class="titleblock" aria-label="About this drawing">
+        <dl>
+          <div><dt>Drawing</dt><dd>Jing Fan, Software Consultant &amp; Developer</dd></div>
+          <div><dt>Location</dt><dd>Ann Arbor, Michigan</dd></div>
+          <div><dt>Scale</dt><dd>Not to scale</dd></div>
+          <div><dt>Note</dt><dd>The furniture moves. Drag a piece, or tab to one and use the arrow keys. Press R to turn it. <button class="reset" id="reset" type="button" hidden>Put everything back</button></dd></div>
+        </dl>
+      </aside>
+    </div>
   </main>
 
 <script>
@@ -499,6 +586,262 @@
     pieces.forEach((p) => { p.state = { x: 0, y: 0, r: p.home }; apply(p); });
     reset.hidden = true;
   });
+
+  // --- Backyard pond: three koi wander around, and swim over when food lands ---
+  (() => {
+    const pond = document.getElementById('pond');
+    if (!pond) return;
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const water = document.getElementById('water');
+    const fishLayer = document.getElementById('pond-fish');
+    const rippleLayer = document.getElementById('pond-ripples');
+    const foodLayer = document.getElementById('pond-food');
+    const status = document.getElementById('pond-status');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // The oval the fish stay inside. depth() is 0 in the middle and 1 at its edge.
+    const C = { x: 264, y: 148, rx: 196, ry: 92 };
+    const depth = (x, y) => ((x - C.x) / C.rx) ** 2 + ((y - C.y) / C.ry) ** 2;
+
+    const make = (name, attrs, parent) => {
+      const node = document.createElementNS(NS, name);
+      Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+      parent.appendChild(node);
+      return node;
+    };
+
+    // A koi seen from above: narrow at the mouth, widest at the shoulders, tapering to the tail.
+    // Each pair is [how far along the body, share of the full width].
+    const LEN = 44, WIDE = 6.2, PIVOT = 0.35, N = 14;
+    const PROFILE = [[0, 0], [0.04, 0.5], [0.1, 0.74], [0.18, 0.9], [0.28, 1], [0.4, 0.96], [0.55, 0.82], [0.7, 0.62], [0.85, 0.4], [1, 0.22]];
+    const widthAt = (s) => {
+      for (let i = 1; i < PROFILE.length; i++) {
+        const [s1, f1] = PROFILE[i];
+        if (s <= s1) {
+          const [s0, f0] = PROFILE[i - 1];
+          return WIDE * (f0 + (f1 - f0) * (s - s0) / (s1 - s0));
+        }
+      }
+      return WIDE * 0.22;
+    };
+
+    const FIN = 'M0 -1.5C5 -5.5 12 -5.5 15 -1C14 3.5 8 5 0 2Z';
+    const TAIL = 'M0 -1.4C6 -4 13 -10 19 -11C16.5 -6 15.5 -2 15 0C15.5 2 16.5 6 19 11C13 10 6 4 0 1.4Z';
+    const RED = '#E2502B', CREAM = '#FBF8F1', INK = '#26282B';
+
+    // Markings are [how far along, side to side (-1 to 1), length, width, color]
+    const LOOKS = [
+      { base: CREAM, fin: '#FFFFFF', marks: [[0.13, 0, 3.6, 2.8, RED], [0.34, -0.2, 6.5, 3.6, RED], [0.58, 0.25, 5, 3, RED], [0.82, 0, 3, 1.6, RED]] },   // kohaku
+      { base: '#F0B23A', fin: '#F8DB94', marks: [[0.36, 0, 12, 1.5, '#F8D372']] },                                                                       // golden ogon
+      { base: CREAM, fin: '#FFFFFF', marks: [[0.12, 0.1, 3.4, 2.6, RED], [0.4, 0.15, 7, 3.6, RED], [0.72, -0.2, 4.4, 2.2, RED], [0.3, -0.55, 2.6, 2, INK], [0.52, 0.5, 2.2, 1.8, INK], [0.66, -0.1, 1.8, 1.5, INK]] },   // sanke
+    ];
+    const STARTS = [[200, 120, 0.4], [330, 175, 2.6], [270, 95, -1.9]];
+
+    const eyeX = ((PIVOT - 0.11) * LEN).toFixed(1), noseX = PIVOT * LEN;
+    const koi = LOOKS.map((look, i) => {
+      const g = make('g', {}, fishLayer);
+      const fin = `<path class="f" d="${FIN}" fill="${look.fin}" opacity=".78"/>`;
+      g.innerHTML =
+        `<path class="shade" fill="rgba(30,80,90,.16)" transform="translate(3 4)"/>` +
+        `<path class="tailfin" d="${TAIL}" fill="${look.fin}" opacity=".82"/>` + fin + fin + fin + fin +
+        `<path class="body" fill="${look.base}" stroke="rgba(34,39,42,.22)" stroke-width=".6"/>` +
+        `<clipPath id="koi-clip-${i}"><path/></clipPath>` +
+        `<g clip-path="url(#koi-clip-${i})">${look.marks.map((m) => `<ellipse class="mark" rx="${m[2]}" ry="${m[3]}" fill="${m[4]}"/>`).join('')}</g>` +
+        `<path class="dorsal" fill="none" stroke="rgba(34,39,42,.16)" stroke-width="1.3" stroke-linecap="round"/>` +
+        `<circle cx="${eyeX}" cy="-3.6" r=".95" fill="${INK}"/><circle cx="${eyeX}" cy="3.6" r=".95" fill="${INK}"/>` +
+        `<path d="M${noseX - 0.8} -1.4L${noseX + 1.6} -3M${noseX - 0.8} 1.4L${noseX + 1.6} 3" fill="none" stroke="rgba(34,39,42,.4)" stroke-width=".5" stroke-linecap="round"/>`;
+      const [x, y, a] = STARTS[i];
+      return {
+        g, x, y, a, v: 18, turn: 0, size: [1.3, 1.12, 0.95][i], side: i % 2 ? 1 : -1, wander: 0, aim: a, phase: i * 2, look,
+        shade: g.querySelector('.shade'), body: g.querySelector('.body'), clip: g.querySelector('clipPath path'),
+        tailfin: g.querySelector('.tailfin'), fins: [...g.querySelectorAll('.f')], marks: [...g.querySelectorAll('.mark')], dorsal: g.querySelector('.dorsal'),
+      };
+    });
+
+    const n1 = (v) => v.toFixed(1);
+    const deg = (rad) => (rad * 57.2958).toFixed(1);
+
+    // Redraw one fish: bend the spine into an S, then hang the outline, fins and markings off it
+    const place = (k) => {
+      const sway = 2.2 + k.v * 0.06;                        // the tail sweeps wider at speed
+      const lean = Math.max(-7, Math.min(7, k.turn * 5));   // and the body curves into a turn
+      const spine = [];
+      for (let i = 0; i <= N; i++) {
+        const s = i / N;
+        spine.push([(PIVOT - s) * LEN, s * s * (sway * Math.sin(k.phase - 3.2 * s) + lean)]);
+      }
+
+      const left = [], right = [], frame = [];
+      spine.forEach(([x, y], i) => {
+        const [ax, ay] = spine[Math.max(0, i - 1)], [bx, by] = spine[Math.min(N, i + 1)];
+        const tx = bx - ax, ty = by - ay, tl = Math.hypot(tx, ty) || 1;
+        const nx = -ty / tl, ny = tx / tl, w = widthAt(i / N);
+        left.push([x + nx * w, y + ny * w]);
+        right.push([x - nx * w, y - ny * w]);
+        frame.push({ x, y, nx, ny, w, angle: Math.atan2(ty, tx) });
+      });
+
+      const ring = left.concat(right.slice(1).reverse());
+      const mid = (p, q) => [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
+      const m0 = mid(ring[ring.length - 1], ring[0]);
+      let d = `M${n1(m0[0])} ${n1(m0[1])}`;
+      ring.forEach((p, i) => {
+        const m = mid(p, ring[(i + 1) % ring.length]);
+        d += `Q${n1(p[0])} ${n1(p[1])} ${n1(m[0])} ${n1(m[1])}`;
+      });
+      d += 'Z';
+      k.body.setAttribute('d', d);
+      k.clip.setAttribute('d', d);
+      k.shade.setAttribute('d', d);
+
+      const at = (s) => frame[Math.round(s * N)];
+      const flap = 0.16 * Math.sin(k.phase * 0.5);
+      // two big pectoral fins behind the head, two small pelvic fins past the middle
+      [[0.26, 1, 0.9, 1], [0.26, -1, 0.9, 1], [0.57, 1, 0.75, 0.55], [0.57, -1, 0.75, 0.55]].forEach(([s, side, sweep, scale], i) => {
+        const f = at(s);
+        k.fins[i].setAttribute('transform',
+          `translate(${n1(f.x + f.nx * f.w * side * 0.85)} ${n1(f.y + f.ny * f.w * side * 0.85)}) rotate(${deg(f.angle + side * (sweep + flap))}) scale(${scale} ${side * scale})`);
+      });
+
+      const end = frame[N];
+      k.tailfin.setAttribute('transform', `translate(${n1(end.x)} ${n1(end.y)}) rotate(${deg(end.angle + 0.38 * Math.sin(k.phase - 4.1))})`);
+
+      k.look.marks.forEach(([s, off], i) => {
+        const f = at(s);
+        k.marks[i].setAttribute('transform', `translate(${n1(f.x + f.nx * f.w * off)} ${n1(f.y + f.ny * f.w * off)}) rotate(${deg(f.angle)})`);
+      });
+
+      k.dorsal.setAttribute('d', 'M' + spine.slice(5, 11).map(([x, y]) => `${n1(x)} ${n1(y)}`).join('L'));
+      // the shadow always falls the same way on the pond floor, whichever way the fish faces
+      const ca = Math.cos(k.a), sa = Math.sin(k.a);
+      k.shade.setAttribute('transform', `translate(${n1((3 * ca + 4 * sa) / k.size)} ${n1((4 * ca - 3 * sa) / k.size)})`);
+      k.g.setAttribute('transform', `translate(${n1(k.x)} ${n1(k.y)}) rotate(${deg(k.a)}) scale(${k.size})`);
+    };
+    koi.forEach(place);
+
+    const ripple = (x, y, size) => {
+      const ring = make('circle', { class: 'ripple', cx: x, cy: y, r: size }, rippleLayer);
+      ring.addEventListener('animationend', () => ring.remove());
+      if (still) ring.remove();
+    };
+
+    const pellets = [];
+    const remove = (p) => {
+      const i = pellets.indexOf(p);
+      if (i >= 0) pellets.splice(i, 1);
+      p.node.remove();
+    };
+
+    const dropFood = (x, y) => {
+      if (pellets.length >= 24) return;
+      const d = depth(x, y);
+      if (d > 0.8) {            // pull food in from the bank so a fish can reach it
+        const f = Math.sqrt(0.8 / d);
+        x = C.x + (x - C.x) * f;
+        y = C.y + (y - C.y) * f;
+      }
+      const node = make('circle', { class: 'pellet', cx: x.toFixed(1), cy: y.toFixed(1), r: 2.6 }, foodLayer);
+      const p = { x, y, node, born: performance.now() };
+      pellets.push(p);
+      ripple(x, y, 16);
+      // with motion turned off the fish stay put, so the food just fades
+      if (still) setTimeout(() => { node.classList.add('stale'); setTimeout(() => remove(p), 1300); }, 2200);
+    };
+
+    pond.addEventListener('click', (e) => {
+      const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(pond.getScreenCTM().inverse());
+      const onWater = water.isPointInFill ? water.isPointInFill(pt) : depth(pt.x, pt.y) < 1.3;
+      if (onWater) dropFood(pt.x, pt.y);
+    });
+
+    document.getElementById('feed').addEventListener('click', () => {
+      const t = Math.random() * 6.283, r = Math.sqrt(Math.random()) * 0.45;
+      const cx = C.x + Math.cos(t) * r * C.rx, cy = C.y + Math.sin(t) * r * C.ry;
+      for (let i = 0; i < 6; i++) {
+        setTimeout(() => dropFood(cx + (Math.random() - 0.5) * 80, cy + (Math.random() - 0.5) * 50), i * 130);
+      }
+      status.textContent = 'Food is in the water.';
+    });
+
+    if (still) return;
+
+    const swim = (k, dt) => {
+      let target = null, near = Infinity;
+      for (const p of pellets) {
+        const d = Math.hypot(p.x - k.x, p.y - k.y);
+        if (d < near) { near = d; target = p; }
+      }
+
+      let want, speed, agility;
+      if (target) {
+        const reach = PIVOT * LEN * k.size;   // how far the mouth is ahead of the shoulders
+        const bite = Math.hypot(target.x - (k.x + Math.cos(k.a) * reach), target.y - (k.y + Math.sin(k.a) * reach));
+        if (bite < 4 + 3 * k.size || near < 6 * k.size) {
+          remove(target);
+          ripple(target.x, target.y, 9);
+          if (!pellets.length) status.textContent = 'All eaten.';
+          return;
+        }
+        want = Math.atan2(target.y - k.y, target.x - k.x);
+        speed = 58;
+        agility = 3.4;
+      } else {
+        k.wander -= dt;
+        if (k.wander <= 0) {
+          k.aim = k.a + (Math.random() - 0.5) * 2.2;
+          k.wander = 1.5 + Math.random() * 2.5;
+        }
+        want = k.aim;
+        speed = 18 + 6 * k.size;
+        agility = 1.3;
+        if (depth(k.x, k.y) > 0.62) {   // near the bank: curve back toward the middle
+          want = k.aim = Math.atan2(C.y - k.y, C.x - k.x) + 0.7 * k.side;
+          agility = 2;
+        }
+      }
+
+      const diff = Math.atan2(Math.sin(want - k.a), Math.cos(want - k.a));
+      const turn = agility * dt;
+      const applied = Math.max(-turn, Math.min(turn, diff));
+      k.a += applied;
+      if (dt) k.turn += (applied / dt - k.turn) * Math.min(1, 4 * dt);
+      if (target) speed *= Math.max(0.3, Math.cos(diff));   // slow down to turn, so it can't orbit the food
+      k.v += (speed - k.v) * Math.min(1, 2.2 * dt);
+      k.x += Math.cos(k.a) * k.v * dt;
+      k.y += Math.sin(k.a) * k.v * dt;
+
+      const d = depth(k.x, k.y);
+      if (d > 1) {
+        const f = 1 / Math.sqrt(d);
+        k.x = C.x + (k.x - C.x) * f;
+        k.y = C.y + (k.y - C.y) * f;
+      }
+      k.phase += dt * (3.5 + k.v * 0.16);
+      place(k);
+    };
+
+    let last = 0, onScreen = true;
+    // pause when scrolled out of view (watching the wrapper, since SVG targets report unreliably)
+    new IntersectionObserver((entries) => { onScreen = entries[entries.length - 1].isIntersecting; }).observe(pond.parentElement);
+
+    const tick = (now) => {
+      const dt = Math.min(0.05, (now - last) / 1000 || 0);
+      last = now;
+      if (onScreen && !document.hidden) {
+        koi.forEach((k) => swim(k, dt));
+        for (const p of [...pellets]) {     // food nobody reached eventually dissolves
+          if (!p.stale && now - p.born > 25000) {
+            p.stale = true;
+            p.node.classList.add('stale');
+            setTimeout(() => remove(p), 1300);
+          }
+        }
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  })();
 </script>
 </body>
 </html>
